@@ -6,7 +6,7 @@ int main() {
     WordCount wc;
 
     wc.incrWordCount("apple");
-    wc.incrWordCount("Apple"); // 應該視為相同的 key
+    wc.incrWordCount("Apple"); 
     wc.incrWordCount("banana");
 
     ASSERT_EQUALS(2, wc.getWordCount("apple"));
