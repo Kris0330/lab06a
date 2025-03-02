@@ -4,7 +4,9 @@
 using namespace std;
 
 WordCount::WordCount() {
-  
+    for (size_t i = 0; i < CAPACITY; i++) {
+        table[i] = vector<pair<string, int>>();
+    }
 }
 
 size_t WordCount::hash(std::string word) const {
@@ -28,8 +30,10 @@ std::string WordCount::makeValidWord(std::string word) {
         if (isalnum(c)) {
             result += tolower(c);
             hasLetter = true;
-        } else if ((c == '-' || c == '\'') && hasLetter && i + 1 < word.size() && isalnum(word[i + 1])) {
-
+        } else if ((c == '-' || c == '\'') 
+                   && hasLetter 
+                   && i + 1 < word.size() 
+                   && isalnum(word[i + 1])) {
             result += c;
         }
     }
@@ -82,5 +86,23 @@ int WordCount::getNumUniqueWords() const {
         count += bucket.size();
     }
     return count;
+}
+
+int WordCount::decrWordCount(std::string word) {
+    word = makeValidWord(word);
+    if (word.empty()) return -1;
+
+    size_t index = hash(word);
+    for (auto it = table[index].begin(); it != table[index].end(); ++it) {
+        if (it->first == word) {
+            it->second--;
+            if (it->second <= 0) {
+                table[index].erase(it);
+                return 0;
+            }
+            return it->second;
+        }
+    }
+    return -1;
 }
 
