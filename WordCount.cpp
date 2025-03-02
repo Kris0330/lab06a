@@ -34,6 +34,7 @@ std::string WordCount::makeValidWord(std::string word) {
                    && hasLetter 
                    && i + 1 < word.size() 
                    && isalnum(word[i + 1])) {
+           
             result += c;
         }
     }
@@ -43,9 +44,9 @@ std::string WordCount::makeValidWord(std::string word) {
 
 int WordCount::incrWordCount(std::string word) {
     word = makeValidWord(word);
-    if (word.empty()) return 0;
+    if (word.empty()) return 0; 
 
-    size_t index = hash(word);
+    size_t index = hash(word); 
     for (auto& pair : table[index]) {
         if (pair.first == word) {
             pair.second++; 
@@ -95,7 +96,7 @@ int WordCount::decrWordCount(std::string word) {
     size_t index = hash(word);
     for (auto it = table[index].begin(); it != table[index].end(); ++it) {
         if (it->first == word) {
-            it->second--;
+            it->second--; 
             if (it->second <= 0) {
                 table[index].erase(it);
                 return 0;
@@ -103,6 +104,7 @@ int WordCount::decrWordCount(std::string word) {
             return it->second;
         }
     }
-    return -1;
+    return -1; 
 }
+
 
