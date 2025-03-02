@@ -1,12 +1,11 @@
 #include "WordCount.h"
 #include <vector>
-#include <cctype>   
-#include <algorithm> 
-
+#include <cctype>  
 using namespace std;
 
 WordCount::WordCount() {
-  }
+  
+}
 
 size_t WordCount::hash(std::string word) const {
     size_t accumulator = 0;
@@ -17,16 +16,24 @@ size_t WordCount::hash(std::string word) const {
 }
 
 bool WordCount::isWordChar(char c) {
-    return isalnum(c); 
+    return isalnum(c) || c == '-' || c == '\'';
 }
 
 std::string WordCount::makeValidWord(std::string word) {
     string result = "";
-    for (char c : word) {
-        if (isWordChar(c)) {
-            result += tolower(c); 
+    bool hasLetter = false;  
+
+    for (size_t i = 0; i < word.size(); i++) {
+        char c = word[i];
+        if (isalnum(c)) {
+            result += tolower(c);
+            hasLetter = true;
+        } else if ((c == '-' || c == '\'') && hasLetter && i + 1 < word.size() && isalnum(word[i + 1])) {
+
+            result += c;
         }
     }
+
     return result;
 }
 
@@ -34,7 +41,7 @@ int WordCount::incrWordCount(std::string word) {
     word = makeValidWord(word);
     if (word.empty()) return 0;
 
-    size_t index = hash(word); 
+    size_t index = hash(word);
     for (auto& pair : table[index]) {
         if (pair.first == word) {
             pair.second++; 
@@ -63,7 +70,7 @@ int WordCount::getTotalWords() const {
     int total = 0;
     for (const auto& bucket : table) {
         for (const auto& pair : bucket) {
-            total += pair.second; 
+            total += pair.second;
         }
     }
     return total;
@@ -72,26 +79,8 @@ int WordCount::getTotalWords() const {
 int WordCount::getNumUniqueWords() const {
     int count = 0;
     for (const auto& bucket : table) {
-        count += bucket.size(); 
+        count += bucket.size();
     }
     return count;
-}
-
-int WordCount::decrWordCount(std::string word) {
-    word = makeValidWord(word);
-    if (word.empty()) return -1;
-
-    size_t index = hash(word);
-    for (auto it = table[index].begin(); it != table[index].end(); ++it) {
-        if (it->first == word) {
-            it->second--; 
-            if (it->second <= 0) {
-                table[index].erase(it);
-                return 0;
-            }
-            return it->second;
-        }
-    }
-    return -1; 
 }
 
