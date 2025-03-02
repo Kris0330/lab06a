@@ -18,7 +18,7 @@ size_t WordCount::hash(std::string word) const {
 }
 
 bool WordCount::isWordChar(char c) {
-    return isalnum(c) || c == '-' || c == '\'';
+    return isalpha(c) || c == '-' || c == '\'';
 }
 
 std::string WordCount::makeValidWord(std::string word) {
@@ -27,14 +27,14 @@ std::string WordCount::makeValidWord(std::string word) {
 
     for (size_t i = 0; i < word.size(); i++) {
         char c = word[i];
-        if (isalnum(c)) {
+        if (isalpha(c)) { 
             result += tolower(c);
             hasLetter = true;
         } else if ((c == '-' || c == '\'') 
                    && hasLetter 
                    && i + 1 < word.size() 
-                   && isalnum(word[i + 1])) {
-           
+                   && isalpha(word[i + 1])) {
+
             result += c;
         }
     }
@@ -98,7 +98,7 @@ int WordCount::decrWordCount(std::string word) {
         if (it->first == word) {
             it->second--; 
             if (it->second <= 0) {
-                table[index].erase(it);
+                table[index].erase(it); 
                 return 0;
             }
             return it->second;
@@ -106,5 +106,4 @@ int WordCount::decrWordCount(std::string word) {
     }
     return -1; 
 }
-
 
